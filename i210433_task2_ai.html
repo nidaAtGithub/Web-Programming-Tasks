@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JS Archery Pro</title>
+    <style>
+        :root {
+            --primary-bg: #2c3e50;
+            --accent-color: #e74c3c;
+            --text-color: #ecf0f1;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a1a1a;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            color: var(--text-color);
+        }
+
+        #game-info {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        #game-container {
+            width: 800px;
+            height: 500px;
+            background-color: #34495e;
+            border: 5px solid #bdc3c7;
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
+            cursor: crosshair;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* The Archery Target Design */
+        #target {
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(
+                circle, 
+                #f1c40f 10%,   /* Bullseye */
+                #e74c3c 10%, #e74c3c 30%, 
+                #3498db 30%, #3498db 50%, 
+                #2c3e50 50%, #2c3e50 70%, 
+                #ecf0f1 70%
+            );
+            border-radius: 50%;
+            position: absolute;
+            display: none;
+            transition: width 0.3s, height 0.3s; /* Smooth shrinking */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        #stats {
+            display: flex;
+            gap: 40px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        #start-btn {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 20px;
+        }
+
+        #start-btn:hover {
+            background-color: #2ecc71;
+        }
+
+        .game-over-msg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            background: rgba(0,0,0,0.8);
+            padding: 20px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-info">
+        <h1>Archery Challenge</h1>
+        <div id="stats">
+            <div>Score: <span id="score">0</span></div>
+            <div>Time: <span id="timer">30</span>s</div>
+        </div>
+    </div>
+
+    <div id="game-container">
+        <div id="target"></div>
+        <button id="start-btn">Start Session</button>
+    </div>
+
+    <script>
+        /**
+         * GAME STATE & CONSTANTS
+         */
+        const target = document.querySelector('#target');
+        const scoreDisplay = document.querySelector('#score');
+        const timerDisplay = document.querySelector('#timer');
+        const startBtn = document.querySelector('#start-btn');
+        const container = document.querySelector('#game-container');
+
+        let score = 0;
+        let timeLeft = 30;
+        let isGameActive = false;
+        let movementTimer;
+        let gameClock;
+        let currentSpeed = 1200; // Starting interval in milliseconds
+        let targetSize = 60;
+
+        /**
+         * CORE FUNCTIONS
+         */
+
+        const moveTarget = () => {
+            if (!isGameActive) return;
+
+            // Calculate boundaries to keep target inside the container
+            const maxX = container.clientWidth - target.offsetWidth;
+            const maxY = container.clientHeight - target.offsetHeight;
+
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+
+            target.style.left = `${randomX}px`;
+            target.style.top = `${randomY}px`;
+        };
+
+        const updateScore = (event) => {
+            // Prevent the "background click" logic from firing
+            event.stopPropagation();
+
+            if (isGameActive) {
+                score++;
+                scoreDisplay.textContent = score;
+                
+                // Visual feedback
+                target.style.transform = 'scale(1.2)';
+                setTimeout(() => target.style.transform = 'scale(1)', 100);
+
+                increaseDifficulty();
+                moveTarget(); // Move immediately on hit for a dynamic feel
+            }
+        };
+
+        const increaseDifficulty = () => {
+            // Every 5 points, increase speed and decrease target size
+            if (score > 0 && score % 5 === 0) {
+                if (currentSpeed > 500) {
+                    currentSpeed -= 150;
+                    // Reset the movement loop with the new speed
+                    clearInterval(movementTimer);
+                    movementTimer = setInterval(moveTarget, currentSpeed);
+                }
+
+                if (targetSize > 30) {
+                    targetSize -= 5;
+                    target.style.width = `${targetSize}px`;
+                    target.style.height = `${targetSize}px`;
+                }
+            }
+        };
+
+        const startTimer = () => {
+            gameClock = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = timeLeft;
+
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        };
+
+        const endGame = () => {
+            isGameActive = false;
+            clearInterval(gameClock);
+            clearInterval(movementTimer);
+            
+            target.style.display = 'none';
+            startBtn.style.display = 'block';
+            startBtn.textContent = 'Play Again';
+            
+            alert(`Game Over! Final Score: ${score}`);
+        };
+
+        const resetGame = () => {
+            score = 0;
+            timeLeft = 30;
+            currentSpeed = 1200;
+            targetSize = 60;
+            isGameActive = true;
+
+            scoreDisplay.textContent = score;
+            timerDisplay.textContent = timeLeft;
+            
+            target.style.width = `${targetSize}px`;
+            target.style.height = `${targetSize}px`;
+            target.style.display = 'block';
+            startBtn.style.display = 'none';
+
+            moveTarget();
+            startTimer();
+            movementTimer = setInterval(moveTarget, currentSpeed);
+        };
+
+        /**
+         * EVENT LISTENERS
+         */
+
+        startBtn.addEventListener('click', resetGame);
+
+        // Target Click
+        target.addEventListener('mousedown', updateScore);
+
+        // Background Click (Miss logic)
+        container.addEventListener('mousedown', () => {
+            if (isGameActive) {
+                console.log("Missed!");
+                // Optional: decrease score or add a visual 'miss' effect
+            }
+        });
+
+    </script>
+</body>
+</html>
