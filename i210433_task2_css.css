@@ -1,0 +1,241 @@
+body 
+{
+    margin: 0;
+    font-family:Georgia, 'Times New Roman', Times, serif
+}
+.startscreen
+{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    width:100vw;
+    height: 100vh;
+    overflow:hidden;
+    position:relative;
+    justify-content:center;
+    background:rgb(125, 166, 182);
+}
+h1
+{
+    font-size: 48px;
+    margin-top:80px;
+    text-align: center;
+}
+/* Start Game button */
+button
+{
+    font-size: 24px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    background-color: rgb(251, 255, 240);
+    color:black;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.button:hover 
+{
+    transform: scale(1.15);             
+}
+.images
+{
+    display: flex;
+    gap: 50px;          
+    justify-content: center;
+    align-items: center;
+    padding-top: 100px;
+    margin-bottom:150px;
+}
+/* main Screen Images */
+.arch,.target
+{
+    width:300px;
+    height:300px;
+    margin-top:50px;
+}
+/* Start Scren */
+.screen
+{
+    width:100vw;
+    height: 100vh;
+    overflow:hidden;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;   
+    justify-content:center;
+    background:lightblue;
+}
+/* Game Area */
+.game-area {
+  width: 100vw;
+  height: 100vh;
+  
+  background: lightblue;
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+/* Stop button */
+.stop-button{
+  font-size: 18px;
+  padding: 10px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  background-color: rgb(251, 255, 240);
+  color: black;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  position: absolute;
+  top: 20px;
+  right: 10px;       /* rightmost */
+}
+.stop-button:hover{ transform: scale(1.15); }
+
+/* Restart button */
+.restart-button{
+  font-size: 18px;
+  padding: 10px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  background-color: rgb(251, 255, 240);
+  color: black;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  position: absolute;
+  top: 20px;
+  right: 240px;      /* move further left */
+}
+.restart-button:hover{ transform: scale(1.15); }
+
+/* Play button */
+.play-button{
+  font-size: 18px;
+  padding: 10px 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  background-color: rgb(251, 255, 240);
+  color: black;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  position: absolute;
+  top: 20px;
+  right: 120px;      /* between restart and stop */
+}
+.play-button:hover{ transform: scale(1.15); }
+
+/* Style for the Score Button */
+.hud
+{
+    position:absolute;
+    top:20px;
+    left:20px;
+    font-size: 18px;
+    background-color: rgb(251, 255, 240);
+    padding: 10px 20px;
+    border-radius: 50px;
+}
+/* Hit and Miss Status */
+.hit-miss
+{
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    display: flex;
+    gap: 40px;            
+    justify-content: center;
+    align-items: center;
+
+    font-size: 18px;
+    background-color: rgb(251, 255, 240);
+    padding: 10px 25px;
+    border-radius: 50px;
+}
+
+.target-shape
+{
+    position: absolute;
+    right: 180px;
+    top: 100px;
+    /*transform: translateY(-50%);*/
+    transition: top 1s linear;
+    width: 120px;
+    height: 120px;
+}
+
+.ring {
+    position: absolute;
+    border-radius: 50%;
+}
+
+.outer {
+    width: 120px;
+    height: 120px;
+    background: blue;
+}
+
+.middle {
+    width: 80px;
+    height: 80px;
+    background: red;
+    top: 20px;
+    left: 20px;
+}
+
+.inner {
+    width: 40px;
+    height: 40px;
+    background: yellow;
+    top: 40px;
+    left: 40px;
+}
+
+
+.bow 
+{
+    position: absolute;
+    left: 50px;
+    bottom: 350px;
+    width: 20px;
+    height: 200px;
+}
+
+.bow-body 
+{
+    width: 20px;
+    height: 200px;
+    border: 5px solid brown;
+    border-right: none;
+    border-radius: 100px 0 0 100px;
+}
+
+.bow-string 
+{
+    position: absolute;
+    right: -7.5px;
+    top: 0;
+    width: 2px;
+    height: 210px;
+    background: black;
+}
+
+.arrow{
+  position: absolute;
+  width: 100px;
+  height: 3px;
+  background: black;
+  display:none;
+}
+
+.arrow-head {
+    position: absolute;
+    right: 0; 
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 15px solid black;  
+    border-top: 7px solid transparent;
+    border-bottom: 7px solid transparent;
+}
+
+
